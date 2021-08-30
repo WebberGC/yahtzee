@@ -2,6 +2,7 @@ import dice
 import random
 
 
+# function to catch invalid input for y and n
 def inputCatcher(input1):
     while input1 != "y" and input1 != "n":
         print("Please enter either 'y' or 'n'\n")
@@ -9,23 +10,25 @@ def inputCatcher(input1):
     return input1
 
 
+# function to display the dice roll
 def diceDisplay():
     print("\nYou rolled:")
     dice.display_hand(lockedDice)
 
 
+# function to ask what dice to remove and then reset the dice values
 def diceReset():
     keptDiceNum = int(input("\nHow many dice do you want to get rid of? "))
     keptDiceCount = 0
-    if keptDiceNum >= 5:
+    if keptDiceNum < 5:
+        while keptDiceCount < keptDiceNum:
+            keptDiceIndex = int(input("What is the die number of the die you want to get rid of? "))
+            lockedDice[keptDiceIndex - 1] = 0
+            keptDiceCount += 1
         return lockedDice
-    while keptDiceCount < keptDiceNum:
-        keptDiceIndex = int(input("What is the die number of the die you want to get rid of? "))
-        lockedDice[keptDiceIndex - 1] = 0
-        keptDiceCount += 1
-    return lockedDice
 
 
+# function to set new random dice numbers
 def newDiceNums():
     index = 0
     for num in lockedDice:
@@ -35,12 +38,17 @@ def newDiceNums():
     return lockedDice
 
 
+# function to roll 2 times
 def nextTurn():
+    diceDisplay()
+    diceReset()
+    newDiceNums()
     diceDisplay()
     diceReset()
     newDiceNums()
 
 
+# function to display scores
 def displayScores():
     print()
     print("                      SCORING")
@@ -62,6 +70,7 @@ def displayScores():
     print("          Large straight(11): ", largeStraight)
     print("                 Yahtzee(12): ", yahtzee)
     print("                  Chance(13): ", chance)
+    print()
     print("      Total of lower section: ", totalLower)
     print("      Total of upper section: ", totalUpper)
     print("                 Grand total: ", grandTotal)
@@ -74,6 +83,7 @@ playInput = input("\nWould you like to play Yahtzee [y|n]? ").lower()
 # input catcher if they don't type y or n
 inputCatcher(playInput)
 
+# score variables
 oneCount = None
 twoCount = None
 threeCount = None
@@ -95,12 +105,15 @@ grandTotalList = [0]
 grandTotal = sum(grandTotalList)
 bonusList = [0]
 bonus = sum(bonusList)
-turnCounter = 0
+
+turnCounter = 0  # variable to show how many turns have been had
+selectedScores = []  # list of scores to prevent scoring in same score
+highScore = []  # list of previous scores
 
 # while input is y
-while playInput == "y" and turnCounter < 13:
+while playInput == "y":
     lockedDice = []  # locked dice
-    dieCount = [0, 0, 0, 0, 0, 0]
+    dieCount = [0, 0, 0, 0, 0, 0]  # counts how many of each dice number
     diceCount = 0  # counting the number of dice added
 
     # adds 5 dice to rolled dice list
@@ -110,7 +123,6 @@ while playInput == "y" and turnCounter < 13:
         diceCount += 1
 
     # displays hand, rolls dice and updates dice for 2 turns
-    nextTurn()
     nextTurn()
 
     # displays hand
@@ -123,65 +135,87 @@ while playInput == "y" and turnCounter < 13:
         dieCount[index - 1] = lockedDice.count(index)
         index += 1
 
+    # asking user where they would like to place their score
     scoreInput = int(input("Where would you like to place your score? "))
 
+    # if input is in selectedscores list, it will ask them to place their score again
+    while scoreInput in selectedScores:
+        scoreInput = int(input("You have already placed a score there. Where would you like to place your score?  "))
+
+    # player selection gets added to the scoreboard and added to appropriate lists
     if scoreInput == 1:
         oneCount = lockedDice.count(1)
         bonusList.append(oneCount)
         totalLowerList.append(oneCount)
         grandTotalList.append(oneCount)
+        selectedScores.append(scoreInput)
 
+    # player selection gets added to the scoreboard and added to appropriate lists
     elif scoreInput == 2:
         twoCount = lockedDice.count(2)
         twoCount *= 2
         bonusList.append(twoCount)
         totalLowerList.append(twoCount)
         grandTotalList.append(twoCount)
+        selectedScores.append(scoreInput)
 
+    # player selection gets added to the scoreboard and added to appropriate lists
     elif scoreInput == 3:
         threeCount = lockedDice.count(3)
         threeCount *= 3
         bonusList.append(threeCount)
         totalLowerList.append(threeCount)
         grandTotalList.append(threeCount)
+        selectedScores.append(scoreInput)
 
+    # player selection gets added to the scoreboard and added to appropriate lists
     elif scoreInput == 4:
         fourCount = lockedDice.count(4)
         fourCount *= 4
         bonusList.append(fourCount)
         totalLowerList.append(fourCount)
         grandTotalList.append(fourCount)
+        selectedScores.append(scoreInput)
 
+    # player selection gets added to the scoreboard and added to appropriate lists
     elif scoreInput == 5:
         fiveCount = lockedDice.count(5)
         fiveCount *= 5
         bonusList.append(fiveCount)
         totalLowerList.append(fiveCount)
         grandTotalList.append(fiveCount)
+        selectedScores.append(scoreInput)
 
+    # player selection gets added to the scoreboard and added to appropriate lists
     elif scoreInput == 6:
         sixCount = lockedDice.count(6)
         sixCount *= 6
         bonusList.append(sixCount)
         totalLowerList.append(sixCount)
         grandTotalList.append(sixCount)
+        selectedScores.append(scoreInput)
 
+    # player selection gets added to the scoreboard and added to appropriate lists
     elif scoreInput == 7:
-        if 3 in dieCount:
+        if 3 in dieCount or 4 in dieCount or 5 in dieCount:
             threeKind = sum(lockedDice)
         else:
             threeKind = 0
         totalUpperList.append(threeKind)
         grandTotalList.append(threeKind)
+        selectedScores.append(scoreInput)
 
+    # player selection gets added to the scoreboard and added to appropriate lists
     elif scoreInput == 8:
-        if 4 in dieCount:
+        if 4 in dieCount or 5 in dieCount:
             fourKind = sum(lockedDice)
         else:
             fourKind = 0
         totalUpperList.append(fourKind)
         grandTotalList.append(fourKind)
+        selectedScores.append(scoreInput)
 
+    # player selection gets added to the scoreboard and added to appropriate lists
     elif scoreInput == 9:
         if 3 in dieCount and 2 in dieCount:
             fullHouse = 25
@@ -189,7 +223,9 @@ while playInput == "y" and turnCounter < 13:
             fullHouse = 0
         totalUpperList.append(fullHouse)
         grandTotalList.append(fullHouse)
+        selectedScores.append(scoreInput)
 
+    # player selection gets added to the scoreboard and added to appropriate lists
     elif scoreInput == 10:
         if 1 in lockedDice and 2 in lockedDice and 3 in lockedDice and 4 in lockedDice:
             smallStraight = 30
@@ -201,7 +237,9 @@ while playInput == "y" and turnCounter < 13:
             smallStraight = 0
         totalUpperList.append(smallStraight)
         grandTotalList.append(smallStraight)
+        selectedScores.append(scoreInput)
 
+    # player selection gets added to the scoreboard and added to appropriate lists
     elif scoreInput == 11:
         if 1 in lockedDice and 2 in lockedDice and 3 in lockedDice and 4 in lockedDice and 5 in lockedDice:
             largeStraight = 40
@@ -211,7 +249,9 @@ while playInput == "y" and turnCounter < 13:
             largeStraight = 0
         totalUpperList.append(largeStraight)
         grandTotalList.append(largeStraight)
+        selectedScores.append(scoreInput)
 
+    # player selection gets added to the scoreboard and added to appropriate lists
     elif scoreInput == 12:
         if 5 in dieCount:
             yahtzee = 50
@@ -219,18 +259,61 @@ while playInput == "y" and turnCounter < 13:
             yahtzee = 0
         totalUpperList.append(yahtzee)
         grandTotalList.append(yahtzee)
+        selectedScores.append(scoreInput)
 
+    # player selection gets added to the scoreboard and added to appropriate lists
     elif scoreInput == 13:
         chance = sum(lockedDice)
         totalUpperList.append(chance)
         grandTotalList.append(chance)
+        selectedScores.append(scoreInput)
 
+    # adds all the items to make up totallower, totalupper, grand total and bonus sum
     totalLower = sum(totalLowerList)
     totalUpper = sum(totalUpperList)
     grandTotal = sum(grandTotalList)
-    bonus = sum(bonusList)
+    bonusSum = sum(bonusList)
 
+    # if bonussum is more than 63, user gets 25 points
+    if bonusSum >= 63:
+        bonus = 25
+        grandTotalList.append(bonus)
+
+    # display scores to user
     displayScores()
 
+    # turn adds 1, once it reaches 13 it ends the game
     turnCounter += 1
+    while turnCounter == 13:
 
+        # score variables
+        oneCount = None
+        twoCount = None
+        threeCount = None
+        fourCount = None
+        fiveCount = None
+        sixCount = None
+        threeKind = None
+        fourKind = None
+        fullHouse = None
+        smallStraight = None
+        largeStraight = None
+        yahtzee = None
+        chance = None
+        totalLowerList = [0]
+        totalLower = sum(totalLowerList)
+        totalUpperList = [0]
+        totalUpper = sum(totalUpperList)
+        grandTotalList = [0]
+        grandTotal = sum(grandTotalList)
+        bonusList = [0]
+        bonus = sum(bonusList)
+
+        turnCounter = 0  # variable to show how many turns have been had
+        selectedScores = []  # list of scores to prevent scoring in same score
+
+        # play input
+        playInput = input("\nThanks for playing! Do you want to play again [y|n]? ").lower()
+
+        # input catcher if they don't type y or n
+        inputCatcher(playInput)
