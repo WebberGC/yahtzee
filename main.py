@@ -26,6 +26,12 @@ def diceReset():
             rolledDice[rerollDiceIndex - 1] = 0
             rerollDiceCount += 1
         return rolledDice
+    else:
+        while rerollDiceCount < 5:
+            rerollDiceIndex = rerollDiceCount
+            rolledDice[rerollDiceIndex - 1] = 0
+            rerollDiceCount += 1
+        return rolledDice
 
 
 # function to set new random dice numbers
