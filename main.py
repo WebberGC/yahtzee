@@ -18,20 +18,16 @@ def diceDisplay():
 
 # function to ask what dice to remove and then reset the dice values
 def diceReset():
-    rerollDiceNum = int(input("\nHow many dice do you want to get rid of? "))
-    rerollDiceCount = 0
-    if rerollDiceNum < 5:
-        while rerollDiceCount < rerollDiceNum:
-            rerollDiceIndex = int(input("What is the die number of the die you want to get rid of? "))
-            rolledDice[rerollDiceIndex - 1] = 0
-            rerollDiceCount += 1
-        return rolledDice
-    else:
-        while rerollDiceCount < 5:
-            rerollDiceIndex = rerollDiceCount
-            rolledDice[rerollDiceIndex - 1] = 0
-            rerollDiceCount += 1
-        return rolledDice
+    rerollDiceNum = input("\nWhat dice do you want to get rid of (no separator)? Press 0 for none. ")
+    while not rerollDiceNum.isnumeric() or "6" in rerollDiceNum or "7" in rerollDiceNum or "8" in rerollDiceNum or \
+            "9" in rerollDiceNum:
+        rerollDiceNum = \
+            input("\nSorry. That isn't valid. What dice do you want to get rid of (no separator)? Press 0 for none. ")
+    rerollDiceNum.split(" ")
+    removedNumbers = [int(i) for i in rerollDiceNum]
+    for num in removedNumbers:
+        rolledDice[num - 1] = 0
+    return rolledDice
 
 
 # function to set new random dice numbers
@@ -114,7 +110,7 @@ bonus = sum(bonusList)
 
 turnCounter = 0  # variable to show how many turns have been had
 selectedScores = []  # list of scores to prevent scoring in same score
-highScore = []  # list of previous scores
+highScore = [0]  # list of previous scores
 
 # while input is y
 while playInput == "y":
@@ -142,14 +138,14 @@ while playInput == "y":
         index += 1
 
     # asking user where they would like to place their score
-    scoreInput = int(input("Where would you like to place your score? "))
+    scoreInput = input("Where would you like to place your score? ")
 
-    # if input is in selectedscores list, it will ask them to place their score again
-    while scoreInput in selectedScores:
-        scoreInput = int(input("You have already placed a score there. Where would you like to place your score?  "))
+    while not scoreInput.isnumeric() or int(scoreInput) > 13 or scoreInput in selectedScores:
+        scoreInput = input("\nSorry. That is not valid. Where would you like to place your score? ")
 
-    # player selection gets added to the scoreboard and added to appropriate lists
-    if scoreInput == 1:
+
+    # player selection gets added to the scoreboard and added to appropriate listsy
+    if int(scoreInput) == 1:
         oneCount = rolledDice.count(1)
         bonusList.append(oneCount)
         totalLowerList.append(oneCount)
@@ -157,7 +153,7 @@ while playInput == "y":
         selectedScores.append(scoreInput)
 
     # player selection gets added to the scoreboard and added to appropriate lists
-    elif scoreInput == 2:
+    elif int(scoreInput) == 2:
         twoCount = rolledDice.count(2)
         twoCount *= 2
         bonusList.append(twoCount)
@@ -166,7 +162,7 @@ while playInput == "y":
         selectedScores.append(scoreInput)
 
     # player selection gets added to the scoreboard and added to appropriate lists
-    elif scoreInput == 3:
+    elif int(scoreInput) == 3:
         threeCount = rolledDice.count(3)
         threeCount *= 3
         bonusList.append(threeCount)
@@ -175,7 +171,7 @@ while playInput == "y":
         selectedScores.append(scoreInput)
 
     # player selection gets added to the scoreboard and added to appropriate lists
-    elif scoreInput == 4:
+    elif int(scoreInput) == 4:
         fourCount = rolledDice.count(4)
         fourCount *= 4
         bonusList.append(fourCount)
@@ -184,7 +180,7 @@ while playInput == "y":
         selectedScores.append(scoreInput)
 
     # player selection gets added to the scoreboard and added to appropriate lists
-    elif scoreInput == 5:
+    elif int(scoreInput) == 5:
         fiveCount = rolledDice.count(5)
         fiveCount *= 5
         bonusList.append(fiveCount)
@@ -193,7 +189,7 @@ while playInput == "y":
         selectedScores.append(scoreInput)
 
     # player selection gets added to the scoreboard and added to appropriate lists
-    elif scoreInput == 6:
+    elif int(scoreInput) == 6:
         sixCount = rolledDice.count(6)
         sixCount *= 6
         bonusList.append(sixCount)
@@ -202,7 +198,7 @@ while playInput == "y":
         selectedScores.append(scoreInput)
 
     # player selection gets added to the scoreboard and added to appropriate lists
-    elif scoreInput == 7:
+    elif int(scoreInput) == 7:
         if 3 in dieCount or 4 in dieCount or 5 in dieCount:
             threeKind = sum(rolledDice)
         else:
@@ -212,7 +208,7 @@ while playInput == "y":
         selectedScores.append(scoreInput)
 
     # player selection gets added to the scoreboard and added to appropriate lists
-    elif scoreInput == 8:
+    elif int(scoreInput) == 8:
         if 4 in dieCount or 5 in dieCount:
             fourKind = sum(rolledDice)
         else:
@@ -222,7 +218,7 @@ while playInput == "y":
         selectedScores.append(scoreInput)
 
     # player selection gets added to the scoreboard and added to appropriate lists
-    elif scoreInput == 9:
+    elif int(scoreInput) == 9:
         if 3 in dieCount and 2 in dieCount:
             fullHouse = 25
         else:
@@ -232,7 +228,7 @@ while playInput == "y":
         selectedScores.append(scoreInput)
 
     # player selection gets added to the scoreboard and added to appropriate lists
-    elif scoreInput == 10:
+    elif int(scoreInput) == 10:
         if 1 in rolledDice and 2 in rolledDice and 3 in rolledDice and 4 in rolledDice:
             smallStraight = 30
         elif 2 in rolledDice and 3 in rolledDice and 4 in rolledDice and 5 in rolledDice:
@@ -246,7 +242,7 @@ while playInput == "y":
         selectedScores.append(scoreInput)
 
     # player selection gets added to the scoreboard and added to appropriate lists
-    elif scoreInput == 11:
+    elif int(scoreInput) == 11:
         if 1 in rolledDice and 2 in rolledDice and 3 in rolledDice and 4 in rolledDice and 5 in rolledDice:
             largeStraight = 40
         elif 2 in rolledDice and 3 in rolledDice and 4 in rolledDice and 5 in rolledDice and 6 in rolledDice:
@@ -258,7 +254,7 @@ while playInput == "y":
         selectedScores.append(scoreInput)
 
     # player selection gets added to the scoreboard and added to appropriate lists
-    elif scoreInput == 12:
+    elif int(scoreInput) == 12:
         if 5 in dieCount:
             yahtzee = 50
         else:
@@ -268,7 +264,7 @@ while playInput == "y":
         selectedScores.append(scoreInput)
 
     # player selection gets added to the scoreboard and added to appropriate lists
-    elif scoreInput == 13:
+    elif int(scoreInput) == 13:
         chance = sum(rolledDice)
         totalUpperList.append(chance)
         grandTotalList.append(chance)
@@ -291,6 +287,13 @@ while playInput == "y":
     # turn adds 1, once it reaches 13 it ends the game
     turnCounter += 1
     while turnCounter == 13:
+
+        if grandTotal > max(highScore):
+            print("Congratulations! Your total was "+str(grandTotal)+", you have beaten your previous high score of " \
+                  +str(max(highScore)))
+        else:
+            print("Your total was "+str(grandTotal)+", your current high score is: "+str(max(highScore)))
+        highScore.append(grandTotal)
 
         # score variables
         oneCount = None
