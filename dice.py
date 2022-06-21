@@ -1,13 +1,9 @@
-#
-# Dice Poker
-# Dice module - Assignment 1, sp5, 2021.
-#
-
 # Function display_hand to display the face value of dice to the screen.
 # This function takes a list of integers as a parameter (i.e. the values of the
 # five die to display) and displays the dice to the screen.
 # Parameters:  List storing five die face values.
 # Returns: Nothing is returned from the function.
+
 def display_hand(hand):
     
     # Display die number to the screen.
